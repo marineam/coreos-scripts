@@ -58,5 +58,11 @@ test_image_content() {
     fi
   done
 
+  # Check for bug https://bugs.gentoo.org/show_bug.cgi?id=490014
+  if lbzcat "${pkgdb}"/*/*/environment.bz2 | grep '^declare -. EROOT='; then
+    error "test_image_content: EROOT preserved in ebuild environment"
+    returncode=1
+  fi
+
   return $returncode
 }
